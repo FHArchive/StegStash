@@ -1,10 +1,8 @@
 """ encode and decode methods """
-from random import SystemRandom
 import numpy as np
 from PIL import Image
 from metprint import LogType, Logger, FHFormatter
-from stegstash.lsb import setLsb, getLsb, decodeSimpleFlatArr, encodeSimpleFlatArr
-from stegstash.simplecrypt import otp
+from stegstash.lsb import LSB
 
 exts = ["bmp", "gif", "png", "webp"]
 
@@ -19,61 +17,31 @@ def extNotLossless(fileName):
 def encode(openPath, writePath, chars, imageMapSeed, password=""):
 	""" encode an image with lsb data """
 	image, size = openImg(openPath)
-	pointer = 0
-	chars = otp(chars, password)
-	imgMap = getImgMap(imageMapSeed, image)
-	systemRandom = SystemRandom()
-	for char in chars:
-		shift = 0
-		while shift < 8:
-			if imgMap[pointer] > 0:
-				pointer = setLsb(image, pointer, ord(char) >> shift & 1)
-				shift += 1
-			else:
-				pointer = setLsb(image, pointer, systemRandom.randint(0, 1))
+	encodeLsb = LSB(image, data=chars)
+	encodeLsb.encode(imageMapSeed, password)
 	writeImg(writePath, image, size)
 
 
-def decode(openPath, imageMapSeed, password="", zeroTerm=True):
+def decode(openPath, imageMapSeed, password="", zeroTerm=True, file=None):
 	""" decode an image and return a byte string """
 	image, _size = openImg(openPath)
-	pointer = 0
-	imgMap = getImgMap(imageMapSeed, image)
-	chars = []
-	while pointer in range(len(image)):
-		byte = 0
-		shift = 0
-		while shift < 8:
-			if imgMap[pointer] > 0:
-				_pointer, bit = getLsb(image, pointer) # Little endian
-				byte += bit << shift
-				shift += 1
-			pointer += 1
-		if byte == 0 and zeroTerm:
-			return otp("".join(chars), password, False)
-		chars.append(chr(byte))
-	return otp("".join(chars), password, False)
+	decodeLsb = LSB(image)
+	return decodeLsb.decode(imageMapSeed, password, zeroTerm, file)
 
 
 def simpleEncode(openPath, writePath, chars):
 	""" encode an image with lsb data """
 	image, size = openImg(openPath)
-	image = encodeSimpleFlatArr(image, chars)
+	encodeLsb = LSB(image, data=chars)
+	image = encodeLsb.encodeSimpleFlatArr()
 	writeImg(writePath, image, size)
 
 
-def simpleDecode(openPath, zeroTerm=True):
+def simpleDecode(openPath, zeroTerm=True, file=None):
 	""" decode an image and return a byte string """
 	image, _size = openImg(openPath)
-	return decodeSimpleFlatArr(image, zeroTerm)
-
-
-def getImgMap(seed, image):
-	""" get an image map from a seed using python's predictable number generator,
-	Isn't security wonderful
-	"""
-	np.random.seed([ord(char) for char in seed])
-	return np.random.randint(0, 2, len(image), int)
+	decodeLsb = LSB(image)
+	return decodeLsb.decodeSimpleFlatArr(zeroTerm, file)
 
 
 def openImg(path):

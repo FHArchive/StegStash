@@ -3,7 +3,7 @@
 import numpy as np
 import soundfile as sf
 from metprint import LogType, Logger, FHFormatter
-from stegstash.lsb import decodeSimpleFlatArr, encodeSimpleFlatArr
+from stegstash.lsb import LSB
 
 exts = ["wav"]
 
@@ -17,23 +17,32 @@ def extNotLossless(fileName):
 
 def encode(openPath, writePath, chars, imageMapSeed, password=""):
 	""" encode a sound file with lsb data """
+	data, samplerate, shape = openSound(openPath)
+	encodeLsb = LSB(data, data=chars)
+	data = encodeLsb.encode(imageMapSeed, password)
+	writeSound(writePath, data, samplerate, shape)
 
 
-def decode(openPath, imageMapSeed, password="", zeroTerm=True):
+def decode(openPath, imageMapSeed, password="", zeroTerm=True, file=None):
 	""" decode a sound file and return a byte string """
+	data, _samplerate, _shape = openSound(openPath)
+	decodeLsb = LSB(data)
+	return decodeLsb.decode(imageMapSeed, password, zeroTerm, file)
 
 
 def simpleEncode(openPath, writePath, chars):
 	""" encode a sound file with lsb data """
 	data, samplerate, shape = openSound(openPath)
-	data = encodeSimpleFlatArr(data, chars)
+	encodeLsb = LSB(data, data=chars)
+	data = encodeLsb.encodeSimpleFlatArr()
 	writeSound(writePath, data, samplerate, shape)
 
 
-def simpleDecode(openPath, zeroTerm=True):
+def simpleDecode(openPath, zeroTerm=True, file=None):
 	""" decode a sound file and return a byte string """
 	data, _samplerate, _shape = openSound(openPath)
-	return decodeSimpleFlatArr(data, zeroTerm)
+	decodeLsb = LSB(data)
+	return decodeLsb.decodeSimpleFlatArr(zeroTerm, file)
 
 
 def openSound(path):

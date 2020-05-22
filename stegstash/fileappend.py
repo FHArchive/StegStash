@@ -9,6 +9,7 @@ readonly gif_end="00 3b"
 
 '''
 from metprint import LogType, Logger, FHFormatter
+from stegstash.utils import toBin
 from stegstash.simplecrypt import otp
 
 endKeys = {
@@ -28,14 +29,14 @@ def encode(openPath, writePath, chars, password=""):
 	""" encode an image with data """
 	data, fileExt = openImg(openPath)
 	imageWriteData = data[:data.find(endKeys[fileExt]) + len(endKeys[fileExt])]
-	writeImg(writePath, imageWriteData + otp(chars, password).encode("utf-8"))
+	writeImg(writePath, imageWriteData + otp(toBin(chars), password))
 
 
 def decode(openPath, password=""):
 	""" decode an image with data """
 	data, fileExt = openImg(openPath)
 	readData = data[data.find(endKeys[fileExt]) + len(endKeys[fileExt]):]
-	return otp(readData.decode("utf-8"), password, False)
+	return otp(readData, password, False)
 
 
 def openImg(path):

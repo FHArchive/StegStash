@@ -68,7 +68,8 @@ based off documentation/ the readme
   Use similar characters to hide data.
 - soundlsb
 
-  Use LSB steganography to encode data into a range or sound formats.
+  Use LSB steganography to encode and optionally encrypt and set up a mapping for
+  data.
 - fileappend
 
   Append data to various file formats
@@ -80,9 +81,6 @@ based off documentation/ the readme
 For completed components, see the changelog (link below)
 
 - homoglyphs
-
-  add option to use mapping and otp to encode data
-- soundlsb
 
   add option to use mapping and otp to encode data
 - CLI
