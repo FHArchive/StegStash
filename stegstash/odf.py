@@ -7,6 +7,11 @@ Limitations:
 a user modifying the document (tested in LibreOffice and Microsoft Word 365:2004)
 """
 
+from zipfile import ZIP_DEFLATED, ZipFile
+from shutil import copyfile
+from mutablezip import MutableZipFile
+from stegstash.simplecrypt import otp
+from stegstash.utils import toBin, toFile
 from stegstash import zipfile
 
 
@@ -22,7 +27,6 @@ def encodeComment(openPath, writePath, data):
 	zipfile.encodeComment(openPath, writePath, data)
 
 
-
 def decodeComment(openPath):
 	"""decode data from a open document file by reading xml comments
 
@@ -36,14 +40,34 @@ def decodeComment(openPath):
 	return zipfile.decodeComment(openPath)
 
 
-def encodeFile(file):
+def encodeFile(openPath, writePath, file, fileName="application.xml",
+password=""):
 	""" encode data as a file """
 	# Add one of the following: <manifest:manifest></manifest:manifest>
 	# <manifest:file-entry manifest:full-path="<file>" manifest:media-type="application/octet-stream"/>
 	# <manifest:file-entry manifest:full-path="/application.xml"
 	# manifest:media-type="text/xml"/>
+	copyfile(openPath, writePath)
+	with MutableZipFile(writePath, "a", compression=ZIP_DEFLATED) as zipFile:
+		zipFile.writestr(fileName, otp(toBin(file), password))
+		with zipFile.open("META-INF/manifest.xml", "r") as xmlFile:
+			lines = [line.strip() for line in xmlFile.readlines()]
+		lines[1].replace(
+		b"</manifest:manifest>", b"<manifest:file-entry manifest:full-path=\"/" +
+		fileName.encode("utf-8") + b"\" manifest:media-type=\"" + (b"text/xml"
+		if fileName == "application.xml" else b"application/octet-stream") +
+		b"\"/></manifest:manifest>")
+		zipFile.writestr("META-INF/manifest.xml", b"\n".join(lines))
 
 
-def decodeFile():
+def decodeFile(openPath, password="", filePointer=None):
 	""" decode data as a file """
 	# Look for "/*.[* not .xml]" or "/application.xml"
+	with ZipFile(openPath, "r", compression=ZIP_DEFLATED) as zipFile:
+		files = []
+		for file in zipFile.namelist():
+			if not file.endswith((".xml", "mimetype")) or file.endswith("application.xml"):
+				files.append(file)
+		with zipFile.open(files[0], "r") as dataFile:
+			data = otp(dataFile.read(), password, False)
+		return toFile(data, filePointer) if filePointer else data

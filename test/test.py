@@ -5,7 +5,7 @@ from pathlib import Path
 THISDIR = str(Path(__file__).resolve().parent)
 sys.path.insert(0, os.path.dirname(THISDIR))
 
-from stegstash import imagelsb, fileappend, soundlsb, homoglyphs, msoffice
+from stegstash import imagelsb, fileappend, soundlsb, homoglyphs, msoffice, odf
 
 # Simple imagelsb
 imagelsb.simpleEncode(THISDIR + "/originalImage.png",
@@ -49,3 +49,12 @@ msoffice.encodeFile(THISDIR + "/originalDoc.docx",
 THISDIR + "/encodeFile.docx", open(THISDIR + "/hideImage.png", "rb"), password="pass")
 msoffice.decodeFile(THISDIR + "/encodeFile.docx", "pass",
 open(THISDIR + "/docxImageRecovered.png", "wb"))
+
+# odt
+odf.encodeComment(THISDIR + "/originalDoc.odt",
+THISDIR + "/encodeComment.odt", "hello world from encodeComment odt!")
+print(odf.decodeComment(THISDIR + "/encodeComment.odt"))
+odf.encodeFile(THISDIR + "/originalDoc.odt",
+THISDIR + "/encodeFile.odt", open(THISDIR + "/hideImage.png", "rb"), password="pass")
+odf.decodeFile(THISDIR + "/encodeFile.odt", "pass",
+open(THISDIR + "/odtImageRecovered.png", "wb"))
