@@ -64,8 +64,13 @@ class LSB:
 
 
 
-	def decodeSimpleFlatArr(self, zeroTerm=True, file=None):
-		""" decode a flat array with no encryption """
+	def simpleDecode(self, zeroTerm=True, file=None):
+		""" decode a flat array with no encryption
+
+		Args:
+		zeroTerm (boolean, optional): stop decoding on \x00 (NUL). Defaults to True.
+		file (<file>, optional): file pointer. Defaults to None.
+		"""
 		chars = []
 		for _char in range(self.arrayLen // 8):
 			char, zero = self.getLsb8()
@@ -77,7 +82,7 @@ class LSB:
 		return toFile(result, file) if file else result
 
 
-	def encodeSimpleFlatArr(self):
+	def simpleEncode(self):
 		""" encode a flat array with no encryption """
 		for char in self.data:
 			if self.pointer >= self.arrayLen - 8:
@@ -88,7 +93,17 @@ class LSB:
 
 
 	def decode(self, mapSeed, password, zeroTerm=True, file=None):
-		""" decode a data array with a mapSeed and a password """
+		"""decode data from an array using lsb steganography
+
+		Args:
+		mapSeed (string): seed to generate the lsb map
+		password (str, optional): password to encrypt the data with. Defaults to "".
+		zeroTerm (boolean, optional): stop decoding on \x00 (NUL). Defaults to True.
+		file (<file>, optional): file pointer. Defaults to None.
+
+		Returns:
+		bytes: data from the image
+		"""
 		lsbMap = self.getMap(mapSeed)
 		chars = []
 		while self.pointer in range(self.arrayLen):
@@ -109,7 +124,12 @@ class LSB:
 		return toFile(result, file) if file else result
 
 	def encode(self, mapSeed, password):
-		""" encode a data array with a mapSeed and a password """
+		"""encode an array with data using lsb steganography
+
+		Args:
+		mapSeed (string): seed to generate the lsb map
+		password (str, optional): password to encrypt the data with. Defaults to "".
+		"""
 		chars = otp(self.data, password) + b"\x00"
 		lsbMap = self.getMap(mapSeed)
 		systemRandom = SystemRandom()

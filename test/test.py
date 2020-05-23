@@ -5,7 +5,7 @@ from pathlib import Path
 THISDIR = str(Path(__file__).resolve().parent)
 sys.path.insert(0, os.path.dirname(THISDIR))
 
-from stegstash import imagelsb, fileappend, soundlsb, homoglyphs
+from stegstash import imagelsb, fileappend, soundlsb, homoglyphs, msoffice
 
 # Simple imagelsb
 imagelsb.simpleEncode(THISDIR + "/originalImage.png",
@@ -32,11 +32,20 @@ print(fileappend.decode(THISDIR + "/appendEncode.png", "pass"))
 soundlsb.simpleEncode(THISDIR + "/originalSound.wav",
 THISDIR + "/simpleEncode.wav", "hello world from soundLsbSimpleEncode!")
 print(soundlsb.simpleDecode(THISDIR + "/simpleEncode.wav"))
-soundlsb.encode(THISDIR + "/originalSound.wav",
-THISDIR + "/encode.wav", "hello world from soundLsbEncode!", "test", "pass")
+soundlsb.encode(THISDIR + "/originalSound.wav", THISDIR + "/encode.wav",
+"hello world from soundLsbEncode!", "test", "pass")
 print(soundlsb.decode(THISDIR + "/encode.wav", "test", "pass"))
 
 # homoglyphs
 homoglyphs.simpleEncode(THISDIR + "/originalText.txt",
 THISDIR + "/simpleEncode.txt", "glyph")
 print(homoglyphs.simpleDecode(THISDIR + "/simpleEncode.txt"))
+
+# MsOffice
+msoffice.encodeComment(THISDIR + "/originalDoc.docx",
+THISDIR + "/encodeComment.docx", "hello world from encodeComment!")
+print(msoffice.decodeComment(THISDIR + "/encodeComment.docx"))
+msoffice.encodeFile(THISDIR + "/originalDoc.docx",
+THISDIR + "/encodeFile.docx", open(THISDIR + "/hideImage.png", "rb"), password="pass")
+msoffice.decodeFile(THISDIR + "/encodeFile.docx", "pass",
+open(THISDIR + "/docxImageRecovered.png", "wb"))

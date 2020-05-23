@@ -34,6 +34,7 @@ soundfile = "^0.10.3"
 numpy = "^1.18.4"
 metprint = "^2020.6.1"
 pillow = "^7.1.2"
+mutablezip = "^2020"
 
 [tool.dephell.main]
 from = "pyproject.toml"

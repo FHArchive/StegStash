@@ -73,9 +73,12 @@ based off documentation/ the readme
 - fileappend
 
   Append data to various file formats
-- CLI
+- msoffice
 
-  Leverage the above from the command line.
+  Use file inclusion and XML comments to hide data in Microsoft Office documents
+- odf
+
+  Use file inclusion and XML comments to hide data in OpenOffice/ LibreOffice documents
 
 ## Roadmap
 For completed components, see the changelog (link below)
@@ -83,9 +86,6 @@ For completed components, see the changelog (link below)
 - homoglyphs
 
   add option to use mapping and otp to encode data
-- CLI
-
-  complete
 - fileappend
 
   can probably append to all sorts of formats so investigate this more
