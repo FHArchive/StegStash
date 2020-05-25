@@ -43,14 +43,14 @@ Provides multiple methods to hide and retrieve data.
 Do let me know if any of these are incorrect. Some of the comparisons are
 based off documentation/ the readme
 
-|Name|ImageLSB|SoundLSB|Homoglyphs|FileAppend|
-|---|---|---|---|---|
-|StegStash|:heavy_check_mark:\*|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|steghide|:heavy_check_mark:\*|:heavy_check_mark:\*|:x:|:x:|
-|stego-lsb|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|
-|steg|:heavy_check_mark:|:x:|:x:|:x:|
-|stegano|:heavy_check_mark:|:x:|:x:|:x:|
-|steganer|:heavy_check_mark:|:x:|:x:|:x:|
+|Name|ImageLSB|SoundLSB|Homoglyphs|FileAppend|MsOffice|ODF|
+|---|---|---|---|---|---|---|
+|StegStash|:heavy_check_mark:\*|:heavy_check_mark:\*|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|steghide|:heavy_check_mark:\*|:heavy_check_mark:\*|:x:|:x:|:x:|:x:|
+|stego-lsb|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|:x:|:x:|
+|steg|:heavy_check_mark:|:x:|:x:|:x:|:x:|:x:|
+|stegano|:heavy_check_mark:|:x:|:x:|:x:|:x:|:x:|
+|steganer|:heavy_check_mark:|:x:|:x:|:x:|:x:|:x:|
 
 
 ```none
@@ -65,7 +65,8 @@ based off documentation/ the readme
   data.
 - homoglyphs
 
-  Use similar characters to hide data.
+  Use similar characters to hide data and optionally encrypt and set up a mapping for
+  data.
 - soundlsb
 
   Use LSB steganography to encode and optionally encrypt and set up a mapping for
@@ -83,9 +84,6 @@ based off documentation/ the readme
 ## Roadmap
 For completed components, see the changelog (link below)
 
-- homoglyphs
-
-  add option to use mapping and otp to encode data
 - fileappend
 
   can probably append to all sorts of formats so investigate this more

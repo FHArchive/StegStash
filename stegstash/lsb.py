@@ -1,8 +1,6 @@
 """ common lsb functions """
 from random import SystemRandom
-import numpy as np
-from stegstash.utils import toBin, toFile
-from stegstash.simplecrypt import otp
+from stegstash.utils import toBin, toFile, getMap, otp
 
 class LSB:
 	"""Perform lsb encoding and decoding on an array
@@ -55,15 +53,6 @@ class LSB:
 		return chr(byte), nullByte
 
 
-	def getMap(self, seed):
-		""" get an array map from a seed using python's predictable number generator,
-		Isn't security wonderful
-		"""
-		np.random.seed([ord(char) for char in seed])
-		return np.random.randint(0, 2, len(self.array), int)
-
-
-
 	def simpleDecode(self, zeroTerm=True, file=None):
 		""" decode a flat array with no encryption
 
@@ -71,14 +60,14 @@ class LSB:
 		zeroTerm (boolean, optional): stop decoding on \x00 (NUL). Defaults to True.
 		file (<file>, optional): file pointer. Defaults to None.
 		"""
-		chars = []
+		data = []
 		for _char in range(self.arrayLen // 8):
 			char, zero = self.getLsb8()
 			if zero and zeroTerm:
-				result = bytes(chars)
+				result = bytes(data)
 				break
-			chars.append(char)
-		result = bytes(chars)
+			data.append(char)
+		result = bytes(data)
 		return toFile(result, file) if file else result
 
 
@@ -92,7 +81,7 @@ class LSB:
 		return self.array
 
 
-	def decode(self, mapSeed, password, zeroTerm=True, file=None):
+	def decode(self, mapSeed, password="", zeroTerm=True, file=None):
 		"""decode data from an array using lsb steganography
 
 		Args:
@@ -104,8 +93,8 @@ class LSB:
 		Returns:
 		bytes: data from the image
 		"""
-		lsbMap = self.getMap(mapSeed)
-		chars = []
+		lsbMap = getMap(self.array, mapSeed)
+		data = []
 		while self.pointer in range(self.arrayLen):
 			byte = 0
 			shift = 0
@@ -117,23 +106,23 @@ class LSB:
 				else:
 					self.pointer += 1 # Increment pointer anyway
 			if byte == 0 and zeroTerm:
-				result = otp(bytes(chars), password, False)
+				result = otp(bytes(data), password, False)
 				break
-			chars.append(byte)
-		result = otp(bytes(chars), password, False)
+			data.append(byte)
+		result = otp(bytes(data), password, False)
 		return toFile(result, file) if file else result
 
-	def encode(self, mapSeed, password):
+	def encode(self, mapSeed, password=""):
 		"""encode an array with data using lsb steganography
 
 		Args:
 		mapSeed (string): seed to generate the lsb map
 		password (str, optional): password to encrypt the data with. Defaults to "".
 		"""
-		chars = otp(self.data, password) + b"\x00"
-		lsbMap = self.getMap(mapSeed)
+		data = otp(self.data, password) + b"\x00"
+		lsbMap = getMap(self.array, mapSeed)
 		systemRandom = SystemRandom()
-		for char in chars:
+		for char in data:
 			shift = 0
 			while shift < 8:
 				if lsbMap[self.pointer] > 0:

@@ -10,8 +10,7 @@ a user modifying the document (tested in LibreOffice and Microsoft Word 365:2004
 from zipfile import ZIP_DEFLATED, ZipFile
 from shutil import copyfile
 from mutablezip import MutableZipFile
-from stegstash.simplecrypt import otp
-from stegstash.utils import toBin, toFile
+from stegstash.utils import toBin, toFile, otp
 from stegstash import zipfile
 
 

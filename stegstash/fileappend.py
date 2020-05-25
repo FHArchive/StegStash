@@ -6,8 +6,7 @@ png: \x49\x45\x4e\x44\xae\x42\x60\x82 (IEND.b`. - think only IEND is required)
 gif: \x00\x3b (\x3b according to wikipedia)
 """
 from metprint import LogType, Logger, FHFormatter
-from stegstash.utils import toBin, toFile
-from stegstash.simplecrypt import otp
+from stegstash.utils import toBin, toFile, otp
 
 endKeys = {
 "jpg": b"\xff\xd9", "png": b"\x49\x45\x4e\x44\xae\x42\x60\x82",

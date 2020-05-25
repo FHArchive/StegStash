@@ -40,6 +40,11 @@ print(soundlsb.decode(THISDIR + "/encode.wav", "test", "pass"))
 homoglyphs.simpleEncode(THISDIR + "/originalText.txt",
 THISDIR + "/simpleEncode.txt", "glyph")
 print(homoglyphs.simpleDecode(THISDIR + "/simpleEncode.txt"))
+homoglyphs.encode(THISDIR + "/originalText.txt",
+THISDIR + "/encode.txt", "glyph", "test", "pass")
+print(homoglyphs.decode(THISDIR + "/encode.txt", "test", "pass"))
+print(homoglyphs.detectSteg(THISDIR + "/originalText.txt"))
+print(homoglyphs.detectSteg(THISDIR + "/encode.txt"))
 
 # MsOffice
 msoffice.encodeComment(THISDIR + "/originalDoc.docx",

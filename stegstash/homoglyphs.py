@@ -1,71 +1,159 @@
 """ encode a text file using homoglyphs """
-
+from random import SystemRandom
 import homoglyphs as hg
+from stegstash.utils import otpChars, getMap, toFile
 
 HOMOGLYPHS = hg.Homoglyphs(categories=('LATIN', 'COMMON', 'CYRILLIC'))
 
-def simpleEncode(openPath, writePath, chars):
-	""" encode """
+
+def simpleEncode(openPath, writePath, data):
+	"""encode a text file with data using homoglyphs
+
+	Args:
+		openPath (string): path to the original text file to open
+		writePath (string): path to write the stego-text file
+		data (string|bytes|<file>): data to encode
+	"""
 	with open(openPath, encoding="utf-8") as openData:
-		data = openData.read()
-	data = encodeData(data, chars)
-	with open(writePath, "w", encoding="utf-8") as writeData:
-		writeData.write(data)
-
-
-def simpleDecode(openPath, zeroTerm=True):
-	""" decode """
-	with open(openPath, encoding="utf-8") as openData:
-		data = openData.read()
-	return decodeData(data, zeroTerm)
-
-
-
-def encodeData(data, chars):
-	""" encode data with chars """
+		fileData = openData.read()
 	position = 0
 	output = []
-	for char in chars:
+	for char in data + chr(0):
 		shift = 0
 		while shift < 8:
-			result, shift = encodeGlyph(data, position, char, shift)
+			result, shift = encodeGlyph(fileData, position, char, shift)
 			output.append(result)
 			position += 1
-	shift = 0
-	while shift < 8:
-		result, shift = encodeGlyph(data, position, chr(0), shift)
-		output.append(result)
-		position += 1
-	output.append(data[position:])
-	return "".join(output)
+	output.append(fileData[position:])
+	with open(writePath, "w", encoding="utf-8") as writeData:
+		writeData.write("".join(output))
 
-def decodeData(data, zeroTerm=True):
-	""" decode homoglyph data """
+
+def simpleDecode(openPath, zeroTerm=True, file=None):
+	"""decode data from an text file using homoglyphs
+
+	Args:
+		openPath (string): path to the stego-text file to decode
+		zeroTerm (boolean, optional): stop decoding on \x00 (NUL). Defaults to True.
+		file (<file>, optional): file pointer. Defaults to None.
+
+	Returns:
+		bytes: data from the text file
+	"""
+	with open(openPath, encoding="utf-8") as openData:
+		fileData = openData.read()
 	position = 0
-	chars = []
-	for _char in data:
+	data = []
+	for _char in fileData:
 		byte = 0
 		shift = 0
 		while shift < 8:
-			byte, shift = decodeGlyph(data, position, byte, shift)
+			byte, shift = decodeGlyph(fileData, position, byte, shift)
 			position += 1
 		if byte == 0 and zeroTerm:
-			return "".join(chars)
-		chars.append(chr(byte))
-	return "".join(chars)
+			result = "".join(data)
+			break
+		data.append(chr(byte))
+	result = "".join(data)
+	return toFile(result, file) if file else result
 
 
-def encodeGlyph(data, position, char, shift):
+
+def encode(openPath, writePath, data, mapSeed, password=""):
+	"""encode a text file with data using homoglyphs
+
+	Args:
+		openPath (string): path to the original text file to open
+		writePath (string): path to write the stego-text file
+		data (string): data to encode
+		mapSeed (string): seed to generate the lsb map
+		password (str, optional): password to encrypt the data with. Defaults to "".
+	"""
+	with open(openPath, encoding="utf-8") as openData:
+		fileData = openData.read()
+	position = 0
+	output = []
+	data = otpChars(data, password) + "\x00"
+	encodeMap = getMap(fileData, mapSeed)
+	systemRandom = SystemRandom()
+	for char in data:
+		shift = 0
+		while shift < 8:
+			if encodeMap[position] > 0:
+				result, shift = encodeGlyph(fileData, position, char, shift)
+			else:
+				result, _shift = encodeGlyph(fileData, position,
+				chr(systemRandom.randint(0, 1) << shift), shift)
+			output.append(result)
+			position += 1
+	output.append(fileData[position:])
+	with open(writePath, "w", encoding="utf-8") as writeData:
+		writeData.write("".join(output))
+
+
+def decode(openPath, mapSeed, password="", zeroTerm=True, file=None):
+	"""decode data from an text file using homoglyphs
+
+	Args:
+		openPath (string): path to the stego-text file to decode
+		mapSeed (string): seed to generate the lsb map
+		password (str, optional): password to encrypt the data with. Defaults to "".
+		zeroTerm (boolean, optional): stop decoding on \x00 (NUL). Defaults to True.
+		file (<file>, optional): file pointer. Defaults to None.
+
+	Returns:
+		bytes: data from the text file
+	"""
+	with open(openPath, encoding="utf-8") as openData:
+		fileData = openData.read()
+	position = 0
+	data = []
+	decodeMap = getMap(fileData, mapSeed)
+	for _char in fileData:
+		byte = 0
+		shift = 0
+		while shift < 8:
+			if decodeMap[position] > 0:
+				byte, shift = decodeGlyph(fileData, position, byte, shift)
+			position += 1
+		if byte == 0 and zeroTerm:
+			result = otpChars("".join(data), password, False)
+			break
+		data.append(chr(byte))
+	result = otpChars("".join(data), password, False)
+	return toFile(result, file) if file else result
+
+
+def encodeGlyph(fileData, position, char, shift):
 	""" encode a single glyph (1/8th of hidden data)"""
-	combinations = HOMOGLYPHS.get_combinations(data[position])
-	if data[position] not in (" ", "\t", "\n") and len(combinations) > 1:
+	combinations = HOMOGLYPHS.get_combinations(fileData[position])
+	if fileData[position] not in (" ", "\t", "\n") and len(combinations) > 1:
 		return combinations[ord(char) >> shift & 1], shift + 1
 	return combinations[0], shift
 
 
-def decodeGlyph(data, position, byte, shift):
+def decodeGlyph(fileData, position, byte, shift):
 	""" decode a single glyph (1/8th of hidden data)"""
-	combinations = HOMOGLYPHS.get_combinations(data[position])
-	if data[position] not in (" ", "\t", "\n") and len(combinations) > 1:
-		return byte + ((0 if combinations[0] == data[position] else 1) << shift), shift + 1
+	combinations = HOMOGLYPHS.get_combinations(fileData[position])
+	if fileData[position] not in (" ", "\t", "\n") and len(combinations) > 1:
+		return byte + (
+		(0 if combinations[0] == fileData[position] else 1) << shift), shift + 1
 	return byte, shift
+
+
+def detectSteg(openPath):
+	"""Detect the use of homoglyph stegonography.
+
+	False positives can be easily triggered (this checks for non ascii chars)
+
+	Args:
+		openPath (string): path to the text file to analyse
+
+	Returns:
+		boolean: True if this lib has been used to hide data
+	"""
+	try:
+		open(openPath, encoding="ascii").read()
+		return False
+	except UnicodeDecodeError:
+		return True
