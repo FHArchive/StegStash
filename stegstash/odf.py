@@ -51,8 +51,8 @@ password=""):
 		zipFile.writestr(fileName, otp(toBin(file), password))
 		with zipFile.open("META-INF/manifest.xml", "r") as xmlFile:
 			lines = [line.strip() for line in xmlFile.readlines()]
-		lines[1].replace(
-		b"</manifest:manifest>", b"<manifest:file-entry manifest:full-path=\"/" +
+		lines[1] = lines[1].replace(
+		b"</manifest:manifest>", b"<manifest:file-entry manifest:full-path=\"" +
 		fileName.encode("utf-8") + b"\" manifest:media-type=\"" + (b"text/xml"
 		if fileName == "application.xml" else b"application/octet-stream") +
 		b"\"/></manifest:manifest>")
@@ -65,8 +65,29 @@ def decodeFile(openPath, password="", filePointer=None):
 	with ZipFile(openPath, "r", compression=ZIP_DEFLATED) as zipFile:
 		files = []
 		for file in zipFile.namelist():
-			if not file.endswith((".xml", "mimetype")) or file.endswith("application.xml"):
+			if not file.endswith(
+			(".xml", "mimetype")) or file.endswith("application.xml"):
 				files.append(file)
 		with zipFile.open(files[0], "r") as dataFile:
 			data = otp(dataFile.read(), password, False)
 		return toFile(data, filePointer) if filePointer else data
+
+
+def detectSteg(openPath):
+	""" detect the use of odf steganography
+
+	False positives can be triggered by including media in a document
+
+	Args:
+		openPath (string): path to the text file to analyse
+
+	Returns:
+		boolean: True if this lib has been used to hide data
+	"""
+	with ZipFile(openPath, "r", compression=ZIP_DEFLATED) as zipFile:
+		files = []
+		for file in zipFile.namelist():
+			if not file.endswith(
+			(".xml", "mimetype")) or file.endswith("application.xml"):
+				files.append(file)
+	return len(files) > 0 or zipfile.detectSteg(openPath)

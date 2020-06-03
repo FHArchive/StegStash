@@ -1,7 +1,7 @@
 """ encode a text file using homoglyphs """
 from random import SystemRandom
 import homoglyphs as hg
-from stegstash.utils import otpChars, getMap, toFile
+from stegstash.utils import otp, getMap, toFile, toBin
 
 HOMOGLYPHS = hg.Homoglyphs(categories=('LATIN', 'COMMON', 'CYRILLIC'))
 
@@ -18,7 +18,8 @@ def simpleEncode(openPath, writePath, data):
 		fileData = openData.read()
 	position = 0
 	output = []
-	for char in data + chr(0):
+	data = toBin(data)
+	for char in data + b"\x00":
 		shift = 0
 		while shift < 8:
 			result, shift = encodeGlyph(fileData, position, char, shift)
@@ -51,10 +52,9 @@ def simpleDecode(openPath, zeroTerm=True, file=None):
 			byte, shift = decodeGlyph(fileData, position, byte, shift)
 			position += 1
 		if byte == 0 and zeroTerm:
-			result = "".join(data)
 			break
-		data.append(chr(byte))
-	result = "".join(data)
+		data.append(byte)
+	result = bytes(data)
 	return toFile(result, file) if file else result
 
 
@@ -73,7 +73,7 @@ def encode(openPath, writePath, data, mapSeed, password=""):
 		fileData = openData.read()
 	position = 0
 	output = []
-	data = otpChars(data, password) + "\x00"
+	data = otp(toBin(data), password) + b"\x00"
 	encodeMap = getMap(fileData, mapSeed)
 	systemRandom = SystemRandom()
 	for char in data:
@@ -83,7 +83,7 @@ def encode(openPath, writePath, data, mapSeed, password=""):
 				result, shift = encodeGlyph(fileData, position, char, shift)
 			else:
 				result, _shift = encodeGlyph(fileData, position,
-				chr(systemRandom.randint(0, 1) << shift), shift)
+				systemRandom.randint(0, 1) << shift, shift)
 			output.append(result)
 			position += 1
 	output.append(fileData[position:])
@@ -117,18 +117,17 @@ def decode(openPath, mapSeed, password="", zeroTerm=True, file=None):
 				byte, shift = decodeGlyph(fileData, position, byte, shift)
 			position += 1
 		if byte == 0 and zeroTerm:
-			result = otpChars("".join(data), password, False)
 			break
-		data.append(chr(byte))
-	result = otpChars("".join(data), password, False)
+		data.append(byte)
+	result = otp(bytes(data), password, False)
 	return toFile(result, file) if file else result
 
 
-def encodeGlyph(fileData, position, char, shift):
+def encodeGlyph(fileData, position, byte, shift):
 	""" encode a single glyph (1/8th of hidden data)"""
 	combinations = HOMOGLYPHS.get_combinations(fileData[position])
 	if fileData[position] not in (" ", "\t", "\n") and len(combinations) > 1:
-		return combinations[ord(char) >> shift & 1], shift + 1
+		return combinations[byte >> shift & 1], shift + 1
 	return combinations[0], shift
 
 

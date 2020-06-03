@@ -13,6 +13,7 @@ from mutablezip import MutableZipFile
 from stegstash.utils import toBin, toFile, otp
 from stegstash import zipfile
 
+
 def encodeComment(openPath, writePath, data):
 	"""encode an microsoft office file with data by inserting into xml comments
 
@@ -38,7 +39,8 @@ def decodeComment(openPath):
 	return zipfile.decodeComment(openPath)
 
 
-def encodeFile(openPath, writePath, file, fileName="application.xml", password=""):
+def encodeFile(openPath, writePath, file, fileName="application.xml",
+password=""):
 	""" encode data as a file """
 	# Add one of the following:
 	# <Override PartName="/docProps/<file>" ContentType="application/octet-stream"/>
@@ -49,7 +51,7 @@ def encodeFile(openPath, writePath, file, fileName="application.xml", password="
 		zipFile.writestr("docProps/" + fileName, otp(toBin(file), password))
 		with zipFile.open("[Content_Types].xml", "r") as xmlFile:
 			lines = [line.strip() for line in xmlFile.readlines()]
-		lines[1].replace(
+		lines[1] = lines[1].replace(
 		b"</Types>", b"<Override PartName=\"/docProps/" + fileName.encode("utf-8") +
 		b"\" ContentType=\"application/" +
 		(b"vnd.openxmlformats-officedocument.extended-properties+xml"
@@ -72,8 +74,33 @@ def decodeFile(openPath, password="", filePointer=None):
 	with ZipFile(openPath, "r", compression=ZIP_DEFLATED) as zipFile:
 		files = []
 		for file in zipFile.namelist():
-			if not file.endswith((".xml", ".rels")) or file.endswith("application.xml"):
+			if file.startswith("docProps") and (not file.endswith(
+			(".xml", ".rels")) or file.endswith("application.xml")):
 				files.append(file)
 		with zipFile.open(files[0], "r") as dataFile:
 			data = otp(dataFile.read(), password, False)
 		return toFile(data, filePointer) if filePointer else data
+
+
+def detectSteg(openPath, checkDocPropsOnly=True):
+	""" detect the use of microsoft office steganography
+
+	False positives can be triggered by including media in a document when
+	checkDocPropsOnly is set to False
+
+	Args:
+		openPath (string): path to the text file to analyse
+		checkDocPropsOnly (boolean, optional): look under docProps only to
+		mitigate one source of false positives. Defaults to True.
+
+	Returns:
+		boolean: True if this lib has been used to hide data
+	"""
+	with ZipFile(openPath, "r", compression=ZIP_DEFLATED) as zipFile:
+		files = []
+		for file in zipFile.namelist():
+			if (not checkDocPropsOnly or
+			file.startswith("docProps")) and (not file.endswith(
+			(".xml", ".rels")) or file.endswith("application.xml")):
+				files.append(file)
+	return len(files) > 0 or zipfile.detectSteg(openPath)

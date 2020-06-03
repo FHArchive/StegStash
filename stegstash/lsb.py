@@ -64,7 +64,6 @@ class LSB:
 		for _char in range(self.arrayLen // 8):
 			char, zero = self.getLsb8()
 			if zero and zeroTerm:
-				result = bytes(data)
 				break
 			data.append(char)
 		result = bytes(data)
@@ -106,7 +105,6 @@ class LSB:
 				else:
 					self.pointer += 1 # Increment pointer anyway
 			if byte == 0 and zeroTerm:
-				result = otp(bytes(data), password, False)
 				break
 			data.append(byte)
 		result = otp(bytes(data), password, False)

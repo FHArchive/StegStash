@@ -7,7 +7,6 @@ from mutablezip import MutableZipFile
 from stegstash.utils import toBin
 
 
-
 def encodeComment(openPath, writePath, data):
 	"""encode an microsoft office file with data by inserting into xml comments
 
@@ -55,5 +54,18 @@ def decodeComment(openPath):
 		for file in files:
 			with zipFile.open(file, "r") as xmlFile:
 				lines = [line.strip() for line in xmlFile.readlines()]
-			data.append(lines[1].replace(b"<!--", b"").replace(b"-->", b""))
+			if lines[1].find(b"<!--") > -1:
+				data.append(lines[1].replace(b"<!--", b"").replace(b"-->", b""))
 		return b"".join(data)
+
+
+def detectSteg(openPath):
+	""" detect the use of xml comment steganography using this library
+
+	Args:
+		openPath (string): path to the text file to analyse
+
+	Returns:
+		boolean: True if this lib has been used to hide data
+	"""
+	return len(decodeComment(openPath)) > 0

@@ -17,6 +17,8 @@ Provides multiple methods to hide and retrieve data.
 
 - [Comparison to similar projects](#comparison-to-similar-projects)
 - [Features](#features)
+	- [Table Definitions](#table-definitions)
+	- [Comparison](#comparison)
 - [Roadmap](#roadmap)
 - [Changelog](#changelog)
 - [Install With PIP](#install-with-pip)
@@ -59,37 +61,66 @@ based off documentation/ the readme
 
 ## Features
 
-- imagelsb
+
+### Table Definitions
+- *Hide to a basic level* - the process of hiding data in a way that may be
+identified through moderately simple detection methods
+- *Hide with mapping* - hiding the data using a map to do so
+- *Hide reasonably well* - hiding data in a way that may not
+be reliably identified through moderately simple detection methods
+- *Hide and Encrypt* - the process of encrypting data so that if/ when it is
+recovered, there is a decreased chance of successful extraction
+- *Detection* - the process of identifying if there is a high chance of hidden
+data. Use `detectSteg` for this.
+- *Visual* - perform some sort of visual analysis to identify potential hidden
+data. Use `visual` for this.
+
+### Comparison
+
+|Module|Hide to a basic level|Hide with mapping|Hide reasonably well|Hide and Encrypt|Detection|Visual|
+|---|---|---|---|---|---|---|
+|`imagelsb`|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|
+|`soundlsb`|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|
+|`homoglyphs`|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|:x:|
+|`fileappend`|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|:heavy_check_mark:|:x:|
+|`msoffice`|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|:heavy_check_mark:|:x:|
+|`odf`|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|:heavy_check_mark:|:x:|
+|`zerowidth`|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|:x:|
+
+
+
+- `imagelsb`
 
   Use LSB steganography to encode and optionally encrypt and set up a mapping for
   data.
-- homoglyphs
+- `homoglyphs`
 
   Use similar characters to hide data and optionally encrypt and set up a mapping for
   data.
-- soundlsb
+- `soundlsb`
 
   Use LSB steganography to encode and optionally encrypt and set up a mapping for
   data.
-- fileappend
+- `fileappend`
 
   Append data to various file formats
-- msoffice
+- `msoffice`
 
   Use file inclusion and XML comments to hide data in Microsoft Office documents
-- odf
+- `odf`
 
   Use file inclusion and XML comments to hide data in OpenOffice/ LibreOffice documents
+- `zerowidth`
+
+  Use zero length chars to encode data
 
 ## Roadmap
 For completed components, see the changelog (link below)
 
-- fileappend
+- `fileappend`
 
   can probably append to all sorts of formats so investigate this more
-- zerolen
 
-  Use zero length chars to encode data
 
 ## Changelog
 See the [CHANGELOG](/CHANGELOG.md) for more information.

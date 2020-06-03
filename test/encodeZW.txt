@@ -1,0 +1,3 @@
+ABC‎D‪E‍FG‎H​I‬J‎K‏L‪M‎N‏O‍PQR‎S‏T‭U‎V‌W‍XY‎Z‍	‭a‎b‏c‭defgh‎i‎j​k​l​m​nopqrstuvwxyz
+
+This is an example text file that is going to be encoded with secret data

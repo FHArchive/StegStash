@@ -1,5 +1,5 @@
 """ append data to an image after the end
-# Files and byte(s) terminators
+Files and byte(s) terminators
 
 jpg: \xff\xd9
 png: \x49\x45\x4e\x44\xae\x42\x60\x82 (IEND.b`. - think only IEND is required)
@@ -85,3 +85,16 @@ def writeFile(path, byteArr):
 		raise ValueError
 	with open(path, "wb") as fileData:
 		fileData.write(byteArr)
+
+
+def detectSteg(openPath):
+	""" detect the use of file appended steganography
+
+	Args:
+		openPath (string): path to the text file to analyse
+
+	Returns:
+		boolean: True if this lib has been used to hide data
+	"""
+	data, fileExt = openFile(openPath)
+	return len(data[data.find(endKeys[fileExt]) + len(endKeys[fileExt]):]) > 7
