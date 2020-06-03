@@ -21,7 +21,7 @@ if os.path.exists(readme_path):
 setup(
     long_description=readme,
     name='stegstash',
-    version='2020',
+    version='2020.1',
     description='Provides multiple methods to hide and retrieve data',
     python_requires='==3.*,>=3.5.0',
     project_urls={

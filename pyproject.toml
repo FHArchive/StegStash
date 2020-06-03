@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "stegstash"
-version = "2020"
+version = "2020.1"
 description = "Provides multiple methods to hide and retrieve data"
 authors = ["FredHappyface"]
 classifiers = [
