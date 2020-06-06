@@ -114,3 +114,16 @@ def writeImg(path, image, imageSize, mode):
 		raise ValueError
 	Image.fromarray(image.reshape(imageSize[1], imageSize[0],
 	4 if mode in ("RGBA", "PA") else 3)).convert(mode).save(path)
+
+def visual(openPath, imgPath):
+	"""Visualize the use of lsb stegonography.
+
+	Args:
+		openPath (string): path to the text file to analyse
+		imgPath (string): image file path
+	"""
+	image, size, mode = openImg(openPath)
+	imageLen = len(image)
+	for pointer in range(imageLen):
+		image[pointer] = (image[pointer] & 1) * 255
+	writeImg(imgPath, image, size, mode)

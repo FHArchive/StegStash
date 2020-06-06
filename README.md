@@ -20,6 +20,10 @@ Provides multiple methods to hide and retrieve data.
 	- [Table Definitions](#table-definitions)
 	- [Comparison](#comparison)
 - [Roadmap](#roadmap)
+- [Visual Analysis](#visual-analysis)
+	- [ImageLSB](#imagelsb)
+	- [Homoglyphs](#homoglyphs)
+	- [ZeroWidth](#zerowidth)
 - [Changelog](#changelog)
 - [Install With PIP](#install-with-pip)
 - [Language information](#language-information)
@@ -45,14 +49,14 @@ Provides multiple methods to hide and retrieve data.
 Do let me know if any of these are incorrect. Some of the comparisons are
 based off documentation/ the readme
 
-|Name|ImageLSB|SoundLSB|Homoglyphs|FileAppend|MsOffice|ODF|
-|---|---|---|---|---|---|---|
-|StegStash|:heavy_check_mark:\*|:heavy_check_mark:\*|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|steghide|:heavy_check_mark:\*|:heavy_check_mark:\*|:x:|:x:|:x:|:x:|
-|stego-lsb|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|:x:|:x:|
-|steg|:heavy_check_mark:|:x:|:x:|:x:|:x:|:x:|
-|stegano|:heavy_check_mark:|:x:|:x:|:x:|:x:|:x:|
-|steganer|:heavy_check_mark:|:x:|:x:|:x:|:x:|:x:|
+|Name|ImageLSB|SoundLSB|Homoglyphs|FileAppend|MsOffice|ODF|ZeroWidth|
+|---|---|---|---|---|---|---|---|
+|StegStash|:heavy_check_mark:\*|:heavy_check_mark:\*|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|steghide|:heavy_check_mark:\*|:heavy_check_mark:\*|:x:|:x:|:x:|:x:|:x:|
+|stego-lsb|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|:x:|:x:|:x:|
+|steg|:heavy_check_mark:|:x:|:x:|:x:|:x:|:x:|:x:|
+|stegano|:heavy_check_mark:|:x:|:x:|:x:|:x:|:x:|:x:|
+|steganer|:heavy_check_mark:|:x:|:x:|:x:|:x:|:x:|:x:|
 
 
 ```none
@@ -79,13 +83,13 @@ data. Use `visual` for this.
 
 |Module|Hide to a basic level|Hide with mapping|Hide reasonably well|Hide and Encrypt|Detection|Visual|
 |---|---|---|---|---|---|---|
-|`imagelsb`|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|
+|`imagelsb`|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|
 |`soundlsb`|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|
-|`homoglyphs`|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|:x:|
+|`homoglyphs`|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
 |`fileappend`|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|:heavy_check_mark:|:x:|
 |`msoffice`|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|:heavy_check_mark:|:x:|
 |`odf`|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|:heavy_check_mark:|:x:|
-|`zerowidth`|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|:x:|
+|`zerowidth`|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
 
 
 
@@ -120,6 +124,33 @@ For completed components, see the changelog (link below)
 - `fileappend`
 
   can probably append to all sorts of formats so investigate this more
+
+
+## Visual Analysis
+
+### ImageLSB
+
+![og](test/imagelsbVog.png)
+
+![en](test/imagelsbVen.png)
+
+The use of simple lsb steganography can be seen in the top left of the bottom image
+
+### Homoglyphs
+
+![og](test/homoglyphsVog.png)
+
+![en](test/homoglyphsVen.png)
+
+The use of homoglyph steganography can be seen in the bottom image
+
+### ZeroWidth
+
+![og](test/zerowidthVog.png)
+
+![en](test/zerowidthVen.png)
+
+Use of zero width character steganography can be seen in the bottom image
 
 
 ## Changelog

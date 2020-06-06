@@ -12,6 +12,8 @@ print("\n# simple imagelsb")
 imagelsb.simpleEncode(THISDIR + "/originalImage.png",
 THISDIR + "/lsbSimpleEncode.png", "hello world from lsbSimpleEncode!")
 print(imagelsb.simpleDecode(THISDIR + "/lsbSimpleEncode.png"))
+imagelsb.visual(THISDIR + "/originalImage.png", THISDIR + "/imagelsbVog.png")
+imagelsb.visual(THISDIR + "/lsbSimpleEncode.png", THISDIR + "/imagelsbVen.png")
 
 # Hide image simplelsb
 print("\n# hide image simplelsb")
@@ -53,6 +55,8 @@ THISDIR + "/encode.txt", "glyph", "test", "pass")
 print(homoglyphs.decode(THISDIR + "/encode.txt", "test", "pass"))
 print(homoglyphs.detectSteg(THISDIR + "/originalText.txt"))
 print(homoglyphs.detectSteg(THISDIR + "/encode.txt"))
+homoglyphs.visual(THISDIR + "/originalText.txt", THISDIR + "/homoglyphsVog.png")
+homoglyphs.visual(THISDIR + "/encode.txt", THISDIR + "/homoglyphsVen.png")
 
 # MsOffice
 print("\n# msoffice")
@@ -88,3 +92,5 @@ THISDIR + "/encodeZW.txt", "zerowidth", "test", "pass")
 print(zerowidth.decode(THISDIR + "/encodeZW.txt", "test", "pass"))
 print(zerowidth.detectSteg(THISDIR + "/originalText.txt"))
 print(zerowidth.detectSteg(THISDIR + "/simpleEncodeZW.txt"))
+zerowidth.visual(THISDIR + "/originalText.txt", THISDIR + "/zerowidthVog.png")
+zerowidth.visual(THISDIR + "/encodeZW.txt", THISDIR + "/zerowidthVen.png")

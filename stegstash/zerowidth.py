@@ -55,6 +55,7 @@ that a user may have configured word to open a text file (though not completely
 likely). To mitigate this slim risk a safe mode will be added to disable use of
 these chars
 """
+from ansitoimg.render import ansiToHTMLRaster
 from stegstash.utils import otp, getMap, toFile, toBin
 
 HIDDEN_SAFE = [
@@ -251,3 +252,25 @@ def detectSteg(openPath):
 	if any(zwc in fileData for zwc in HIDDEN):
 		return True
 	return False
+
+def visual(openPath, imgPath):
+	"""Visualize the use of homoglyph stegonography.
+
+	Args:
+		openPath (string): path to the text file to analyse
+		imgPath (string): image file path
+	"""
+	with open(openPath, "rb") as openFile:
+		fileData = openFile.read()
+	visualAnsi = []
+	pointer = 0
+	lenFileData = len(fileData)
+	while pointer < lenFileData:
+		size, pointer = getUtf8Size(fileData, pointer)
+		char = fileData[pointer:pointer + size]
+		pointer += size
+		if char in HIDDEN:
+			visualAnsi.append(b"\033[41m \033[0m")
+		else:
+			visualAnsi.append(char)
+	ansiToHTMLRaster(b"".join(visualAnsi).decode("utf-8"), imgPath)

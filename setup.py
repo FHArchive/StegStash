@@ -21,9 +21,9 @@ if os.path.exists(readme_path):
 setup(
     long_description=readme,
     name='stegstash',
-    version='2020.1',
+    version='2020.2',
     description='Provides multiple methods to hide and retrieve data',
-    python_requires='==3.*,>=3.5.0',
+    python_requires='==3.*,>=3.6.1',
     project_urls={
         "documentation":
             "https://github.com/FHPythonUtils/StegStash/blob/master/README.md",
@@ -41,7 +41,6 @@ setup(
         'License :: OSI Approved :: MIT License', 'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
@@ -54,7 +53,8 @@ setup(
     package_dir={"": "."},
     package_data={},
     install_requires=[
-        'metprint==2020.*,>=2020.6.1', 'mutablezip==2020.*,>=2020.0.0',
-        'numpy==1.*,>=1.18.4', 'pillow==7.*,>=7.1.2', 'soundfile==0.*,>=0.10.3'
+        'ansitoimg==2020.*,>=2020.3.2', 'metprint==2020.*,>=2020.6.1',
+        'mutablezip==2020.*,>=2020.0.0', 'numpy==1.*,>=1.18.4',
+        'pillow==7.*,>=7.1.2', 'soundfile==0.*,>=0.10.3'
     ],
 )

@@ -1,12 +1,3 @@
-<a name=".make"></a>
-## make
-
-Makefile for python. Run one of the following subcommands:
-
-install: Poetry install
-build: Building docs, requirements.txt, setup.py, poetry build
-security: Run some basic security checks that are not run in vscode
-
 <a name=".stegstash"></a>
 ## stegstash
 
@@ -234,6 +225,20 @@ False positives can be easily triggered (this checks for non ascii chars)
 
 - `boolean` - True if this lib has been used to hide data
 
+<a name=".stegstash.homoglyphs.visual"></a>
+#### visual
+
+```python
+visual(openPath, imgPath)
+```
+
+Visualize the use of homoglyph stegonography.
+
+**Arguments**:
+
+- `openPath` _string_ - path to the text file to analyse
+- `imgPath` _string_ - image file path
+
 <a name=".stegstash.imagelsb"></a>
 ## stegstash.imagelsb
 
@@ -356,6 +361,20 @@ Write a 1D numpy array to a file
 - `image` _numpy.array_ - 1D numpy array containing image pixels
   imageSize ((int, int)): size of the image
 - `mode` _string_ - PIL Image mode typically one of "RGBA", "RGB", "PA", "P"
+
+<a name=".stegstash.imagelsb.visual"></a>
+#### visual
+
+```python
+visual(openPath, imgPath)
+```
+
+Visualize the use of lsb stegonography.
+
+**Arguments**:
+
+- `openPath` _string_ - path to the text file to analyse
+- `imgPath` _string_ - image file path
 
 <a name=".stegstash.lsb"></a>
 ## stegstash.lsb
@@ -1064,6 +1083,20 @@ detect the use of zero width char steganography
 **Returns**:
 
 - `boolean` - True if this lib has been used to hide data
+
+<a name=".stegstash.zerowidth.visual"></a>
+#### visual
+
+```python
+visual(openPath, imgPath)
+```
+
+Visualize the use of homoglyph stegonography.
+
+**Arguments**:
+
+- `openPath` _string_ - path to the text file to analyse
+- `imgPath` _string_ - image file path
 
 <a name=".stegstash.zipfile"></a>
 ## stegstash.zipfile

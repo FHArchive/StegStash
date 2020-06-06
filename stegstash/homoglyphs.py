@@ -1,6 +1,7 @@
 """ encode a text file using homoglyphs """
 from random import SystemRandom
 import homoglyphs as hg
+from ansitoimg.render import ansiToHTMLRaster
 from stegstash.utils import otp, getMap, toFile, toBin
 
 HOMOGLYPHS = hg.Homoglyphs(categories=('LATIN', 'COMMON', 'CYRILLIC'))
@@ -156,3 +157,20 @@ def detectSteg(openPath):
 		return False
 	except UnicodeDecodeError:
 		return True
+
+def visual(openPath, imgPath):
+	"""Visualize the use of homoglyph stegonography.
+
+	Args:
+		openPath (string): path to the text file to analyse
+		imgPath (string): image file path
+	"""
+	with open(openPath, encoding="utf-8") as openFile:
+		data = openFile.read()
+	visualAnsi = []
+	for char in data:
+		if ord(char) < 128:
+			visualAnsi.append(char)
+		else:
+			visualAnsi.append("\033[31m" + char + "\033[0m")
+	ansiToHTMLRaster("".join(visualAnsi), imgPath)
