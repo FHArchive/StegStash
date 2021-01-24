@@ -1,6 +1,7 @@
-ansitoimg==2020.*,>=2020.3.2
-metprint==2020.*,>=2020.6.1
-mutablezip==2020.*,>=2020.0.0
-numpy==1.*,>=1.18.4
-pillow==7.*,>=7.1.2
-soundfile==0.*,>=0.10.3
+Pillow<10,>=8.1.0
+SoundFile<2,>=0.10.3
+ansitoimg<2022,>=2020.4.4
+metprint<2022,>=2020.7.1
+mutablezip<2022,>=2020.1
+numpy<3,>=1.19.5
+soundfile<2,>=0.10.3

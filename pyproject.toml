@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "stegstash"
-version = "2020.2"
+version = "2021"
 description = "Provides multiple methods to hide and retrieve data"
 authors = ["FredHappyface"]
 classifiers = [
@@ -14,7 +14,6 @@ classifiers = [
 	"Natural Language :: English",
 	"Operating System :: OS Independent",
 	"Programming Language :: Python :: 3",
-	"Programming Language :: Python :: 3.6",
 	"Programming Language :: Python :: 3.7",
 	"Programming Language :: Python :: 3.8",
 	"Programming Language :: Python :: Implementation :: CPython",
@@ -28,17 +27,16 @@ documentation = "https://github.com/FHPythonUtils/StegStash/blob/master/README.m
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.6.1"
-soundfile = "^0.10.3"
-numpy = "^1.18.4"
-metprint = "^2020.6.1"
-pillow = "^7.1.2"
-mutablezip = "^2020"
-ansitoimg = "^2020.3.2"
+python = "^3.7"
+soundfile = "<2,>=0.10.3"
+numpy = "<3,>=1.19.5"
+metprint = "<2022,>=2020.7.1"
+mutablezip = "<2022,>=2020.1"
+ansitoimg = "<2022,>=2020.4.4"
+Pillow = "<10,>=8.1.0"
+SoundFile = "<2,>=0.10.3"
 
-[tool.dephell.main]
-from = "pyproject.toml"
-to = "requirements.txt"
+
 
 [build-system]
 requires = ["poetry>=0.12"]
