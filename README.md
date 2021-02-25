@@ -1,12 +1,12 @@
-[![Github top language](https://img.shields.io/github/languages/top/FHPythonUtils/StegStash.svg?style=for-the-badge)](../../)
-[![Codacy grade](https://img.shields.io/codacy/grade/ff714fa09a7141ef9f0466073971d853.svg?style=for-the-badge)](https://www.codacy.com/gh/FHPythonUtils/StegStash)
+[![GitHub top language](https://img.shields.io/github/languages/top/FHPythonUtils/StegStash.svg?style=for-the-badge)](../../)
 [![Repository size](https://img.shields.io/github/repo-size/FHPythonUtils/StegStash.svg?style=for-the-badge)](../../)
 [![Issues](https://img.shields.io/github/issues/FHPythonUtils/StegStash.svg?style=for-the-badge)](../../issues)
 [![License](https://img.shields.io/github/license/FHPythonUtils/StegStash.svg?style=for-the-badge)](/LICENSE.md)
 [![Commit activity](https://img.shields.io/github/commit-activity/m/FHPythonUtils/StegStash.svg?style=for-the-badge)](../../commits/master)
 [![Last commit](https://img.shields.io/github/last-commit/FHPythonUtils/StegStash.svg?style=for-the-badge)](../../commits/master)
-[![PyPI Downloads](https://img.shields.io/pypi/dm/stegstash.svg?style=for-the-badge)](https://pypi.org/project/stegstash/)
-[![PyPI Version](https://img.shields.io/pypi/v/stegstash.svg?style=for-the-badge)](https://pypi.org/project/stegstash/)
+[![PyPI Downloads](https://img.shields.io/pypi/dm/stegstash.svg?style=for-the-badge)](https://pypistats.org/packages/stegstash)
+[![PyPI Total Downloads](https://img.shields.io/badge/dynamic/json?style=for-the-badge&label=total%20downloads&query=%24.total_downloads&url=https%3A%2F%2Fapi.pepy.tech%2Fapi%2Fprojects%2Fstegstash)](https://pepy.tech/project/stegstash)
+[![PyPI Version](https://img.shields.io/pypi/v/stegstash.svg?style=for-the-badge)](https://pypi.org/project/stegstash)
 
 <!-- omit in toc -->
 # StegStash
@@ -24,7 +24,7 @@ Provides multiple methods to hide and retrieve data.
 	- [ImageLSB](#imagelsb)
 	- [Homoglyphs](#homoglyphs)
 	- [ZeroWidth](#zerowidth)
-- [Changelog](#changelog)
+- [Documentation](#documentation)
 - [Install With PIP](#install-with-pip)
 - [Language information](#language-information)
 	- [Built for](#built-for)
@@ -36,18 +36,23 @@ Provides multiple methods to hide and retrieve data.
 - [How to run](#how-to-run)
 	- [With VSCode](#with-vscode)
 	- [From the Terminal](#from-the-terminal)
-- [How to update, build and publish](#how-to-update-build-and-publish)
+- [Download Project](#download-project)
+	- [Clone](#clone)
+		- [Using The Command Line](#using-the-command-line)
+		- [Using GitHub Desktop](#using-github-desktop)
+	- [Download Zip File](#download-zip-file)
 - [Community Files](#community-files)
 	- [Licence](#licence)
-	- [Changelog](#changelog-1)
+	- [Changelog](#changelog)
 	- [Code of Conduct](#code-of-conduct)
 	- [Contributing](#contributing)
 	- [Security](#security)
 	- [Support](#support)
+	- [Rationale](#rationale)
 
 ## Comparison to similar projects
-Do let me know if any of these are incorrect. Some of the comparisons are
-based off documentation/ the readme
+Do let me know if any of these are incorrect. Some comparisons are
+based off documentation/ the readme.
 
 |Name|ImageLSB|SoundLSB|Homoglyphs|FileAppend|MsOffice|ODF|ZeroWidth|
 |---|---|---|---|---|---|---|---|
@@ -153,11 +158,10 @@ The use of homoglyph steganography can be seen in the bottom image
 Use of zero width character steganography can be seen in the bottom image
 
 
-## Changelog
-See the [CHANGELOG](/CHANGELOG.md) for more information.
+## Documentation
+See the [Docs](/DOCS/) for more information.
 
 ## Install With PIP
-
 ```python
 pip install stegstash
 ```
@@ -167,7 +171,7 @@ Head to https://pypi.org/project/stegstash/ for more info
 ## Language information
 ### Built for
 This program has been written for Python 3 and has been tested with
-Python version 3.8.0 <https://www.python.org/downloads/release/python-380/>.
+Python version 3.9.0 <https://www.python.org/downloads/release/python-380/>.
 
 ## Install Python on Windows
 ### Chocolatey
@@ -181,47 +185,49 @@ version.
 ## Install Python on Linux
 ### Apt
 ```bash
-sudo apt install python3.8
+sudo apt install python3.9
 ```
 
 ## How to run
 ### With VSCode
 1. Open the .py file in vscode
-2. Ensure a python 3.8 interpreter is selected (Ctrl+Shift+P > Python:Select
-Interpreter > Python 3.8)
+2. Ensure a python 3.9 interpreter is selected (Ctrl+Shift+P > Python:Select
+Interpreter > Python 3.9)
 3. Run by pressing Ctrl+F5 (if you are prompted to install any modules, accept)
 ### From the Terminal
 ```bash
 ./[file].py
 ```
 
-## How to update, build and publish
+## Download Project
+### Clone
+#### Using The Command Line
+1. Press the Clone or download button in the top right
+2. Copy the URL (link)
+3. Open the command line and change directory to where you wish to
+clone to
+4. Type 'git clone' followed by URL in step 2
+```bash
+$ git clone https://github.com/FHPythonUtils/StegStash
+```
 
-1. Ensure you have installed the following dependencies
-	Linux
-	```bash
-	wget dephell.org/install | python3.8
-	wget https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3.8
-	```
-	Windows
-	```powershell
-	(wget dephell.org/install -UseBasicParsing).Content | python
-	(wget https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py -UseBasicParsing).Content | python
-	```
-2. Use poetry for the heavy lifting and dephell to generate requirements
-	```bash
-	poetry update
-	dephell deps convert
-	```
-3. Build/ Publish
-	```bash
-	poetry build
-	poetry publish
-	```
-	or
-	```bash
-	poetry publish --build
-	```
+More information can be found at
+<https://help.github.com/en/articles/cloning-a-repository>
+
+#### Using GitHub Desktop
+1. Press the Clone or download button in the top right
+2. Click open in desktop
+3. Choose the path for where you want and click Clone
+
+More information can be found at
+<https://help.github.com/en/desktop/contributing-to-projects/cloning-a-repository-from-github-to-github-desktop>
+
+### Download Zip File
+
+1. Download this GitHub repository
+2. Extract the zip archive
+3. Copy/ move to the desired location
+
 ## Community Files
 ### Licence
 MIT License
@@ -232,19 +238,31 @@ Copyright (c) FredHappyface
 See the [Changelog](/CHANGELOG.md) for more information.
 
 ### Code of Conduct
-In the interest of fostering an open and welcoming environment, we
-as contributors and maintainers pledge to make participation in our
-project and our community a harassment-free experience for everyone.
-Please see the
-[Code of Conduct](https://github.com/FHPythonUtils/.github/blob/master/CODE_OF_CONDUCT.md) for more information.
+Online communities include people from many backgrounds. The *Project*
+contributors are committed to providing a friendly, safe and welcoming
+environment for all. Please see the
+[Code of Conduct](https://github.com/FHPythonUtils/.github/blob/master/CODE_OF_CONDUCT.md)
+ for more information.
 
 ### Contributing
-Contributions are welcome, please see the [Contributing Guidelines](https://github.com/FHPythonUtils/.github/blob/master/CONTRIBUTING.md) for more information.
+Contributions are welcome, please see the
+[Contributing Guidelines](https://github.com/FHPythonUtils/.github/blob/master/CONTRIBUTING.md)
+for more information.
 
 ### Security
-Thank you for improving the security of the project, please see the [Security Policy](https://github.com/FHPythonUtils/.github/blob/master/SECURITY.md) for more information.
+Thank you for improving the security of the project, please see the
+[Security Policy](https://github.com/FHPythonUtils/.github/blob/master/SECURITY.md)
+for more information.
 
 ### Support
 Thank you for using this project, I hope it is of use to you. Please be aware that
 those involved with the project often do so for fun along with other commitments
-(such as work, family, etc). Please see the [Support Policy](https://github.com/FHPythonUtils/.github/blob/master/SUPPORT.md) for more information.
+(such as work, family, etc). Please see the
+[Support Policy](https://github.com/FHPythonUtils/.github/blob/master/SUPPORT.md)
+for more information.
+
+### Rationale
+The rationale acts as a guide to various processes regarding projects such as
+the versioning scheme and the programming styles used. Please see the
+[Rationale](https://github.com/FHPythonUtils/.github/blob/master/RATIONALE.md)
+for more information.
